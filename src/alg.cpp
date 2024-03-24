@@ -11,7 +11,6 @@ int countPairs1(int *arr, int len, int value) {
         }
     }
     return count;
-    return 0;
 }
 int countPairs2(int *arr, int len, int value) {
   int count = 0;
@@ -29,7 +28,6 @@ int countPairs2(int *arr, int len, int value) {
         }
     }
     return count;
-    return 0;
 }
 int binarySearch(int *arr, int left, int right, int value) {
     int count = 0;
@@ -55,7 +53,6 @@ int binarySearch(int *arr, int left, int right, int value) {
         }
     }
     return count;
-    return 0;
 }
 int countPairs3(int *arr, int len, int value) {
     int count = 0;
@@ -63,5 +60,4 @@ int countPairs3(int *arr, int len, int value) {
         count += binarySearch(arr, i + 1, len - 1, value - arr[i]);
     }
     return count;
-    return 0;
 }
