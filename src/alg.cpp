@@ -1,63 +1,108 @@
 // Copyright 2021 NNTU-CS
+#include <alg.h>
 #include <iostream>
+#include <cstdint>
 
 int countPairs1(int *arr, int len, int value) {
     int count = 0;
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < (len - 1); i++) {
         for (int j = i + 1; j < len; j++) {
-            if (arr[i] + arr[j] == value) {
+            if ((arr[i] + arr[j]) == value) {
                 count++;
             }
         }
     }
-    return count;
+    if (count > (0)) {
+        return count;
+    }
+    return 0;
 }
 int countPairs2(int *arr, int len, int value) {
-  int count = 0;
-    int left = 0;
-    int right = len - 1;
-    while (left < right) {
-        if (arr[left] + arr[right] == value) {
-            count++;
-            left++;
-            right--;
-        } else if (arr[left] + arr[right] < value) {
-            left++;
-        } else {
-            right--;
+    int count = 0, x = 0, j = 0;
+    for (int i = 0; i < (len - 1); i++) {
+        if ((arr[i] + arr[i + 1]) >= value) {
+            x = i;
+            break;
         }
     }
-    return count;
-}
-int binarySearch(int *arr, int left, int right, int value) {
-    int count = 0;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (arr[mid] == value) {
-            count++;
-            int temp = mid - 1;
-            while (temp >= 0 && arr[temp] == value) {
-                count++;
-                temp--;
-            }
-            temp = mid + 1;
-            while (temp < right && arr[temp] == value) {
-                count++;
-                temp++;
-            }
+    for (int i = 0; i < (len - 1); i++) {
+        if (arr[i] > value) {
             break;
-        } else if (arr[mid] < value) {
-            left = mid + 1;
+        }
+        if (x <= i) {
+            j = i + 1;
         } else {
-            right = mid - 1;
+            j = x;
+        }
+        for (; j < len; j++) {
+            if ((arr[i] + arr[j]) == value) {
+                count++;
+            }
+            if (arr[j] > value) {
+                break;
+            }
         }
     }
     return count;
 }
 int countPairs3(int *arr, int len, int value) {
-    int count = 0;
-    for (int i = 0; i < len; i++) {
-        count += binarySearch(arr, i + 1, len - 1, value - arr[i]);
+    int count = 0, y = 0, min = 0, max = len;
+    for (int i = 0; i < (len - 1); i++) {
+        if (arr[i] > value) {
+            break;
+        }
+        min = i;
+        max = len - 1;
+        while (min < max) {
+            y = min + ((max - min) / 2);
+            if (min == max) {
+                break;
+            }
+            if ((arr[i] + arr[y]) > value) {
+                for (int n = (y - 1); n >= min; n--) {
+                    max = n + 1;
+                    if (arr[y] != arr[n]) {
+                        break;
+                    }
+                }
+                if (max - min == 1) {
+                    break;
+                }
+            }
+            if ((arr[i] + arr[y]) < value) {
+                for (int n = (y + 1); n <= max; n++) {
+                    min = n - 1;
+                    if (arr[y] != arr[n]) {
+                        break;
+                    }
+                }
+                if (max - min == 1) {
+                    break;
+                }
+            }
+            if ((arr[i] + arr[y]) == value) {
+                int t = max;
+                for (int n = (y + 1); n <= t; n++) {
+                    max = n - 1;
+                    if (arr[y] != arr[n]) {
+                        break;
+                    }
+                }
+                t = min;
+                for (int n = (y - 1); n >= t; n--) {
+                    min = n + 1;
+                    if (arr[y] != arr[n]) {
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        for (int j = min; j <= max; j++) {
+            if (((arr[i] + arr[j]) == value) && (i != j)) {
+                count++;
+            }
+        }
     }
     return count;
 }
